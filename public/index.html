@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>TKA English Master - Latihan Soal TKA Bahasa Inggris</title>
+  <meta name="description" content="Platform simulasi latihan soal TKA Bahasa Inggris minimalis dan elegan dengan 25 paket soal, auto-grading, pembahasan kunci jawaban, dan tracking progres belajar.">
+  
+  <!-- CSS Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+  
+  <!-- Chart.js CDN for Analytics -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+  <!-- Top Navbar (Desktop & Tablet) -->
+  <header class="navbar">
+    <div class="nav-brand" id="btn-brand-home">
+      <div class="brand-icon">TKA</div>
+      <div class="brand-title">English Master<span class="brand-badge">2026</span></div>
+    </div>
+    
+    <nav>
+      <ul class="nav-links">
+        <li>
+          <a class="nav-item active" data-view="dashboard" id="nav-dashboard">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <li>
+          <a class="nav-item" data-view="packages" id="nav-packages">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10M6 10h10"/></svg>
+            <span>Paket Soal (25)</span>
+          </a>
+        </li>
+        <li>
+          <a class="nav-item" data-view="tips" id="nav-tips">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+            <span>Strategi & Tips</span>
+          </a>
+        </li>
+        <li>
+          <a class="nav-item" data-view="bookmarks" id="nav-bookmarks">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg>
+            <span>Tersimpan</span>
+          </a>
+        </li>
+        <li>
+          <a class="nav-item" data-view="settings" id="nav-settings">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            <span>Pengaturan</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    
+    <div class="nav-right-area">
+      <div class="nav-streak" title="Study Streak">
+        <span>🔥</span>
+        <span id="nav-streak-count">0 Hari Belajar</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Bottom Navigation Bar -->
+  <nav class="mobile-bottom-nav">
+    <button class="mobile-nav-btn active" data-view="dashboard">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span>Dashboard</span>
+    </button>
+    <button class="mobile-nav-btn" data-view="packages">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10M6 10h10"/></svg>
+      <span>Paket</span>
+    </button>
+    <button class="mobile-nav-btn" data-view="tips">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+      <span>Tips</span>
+    </button>
+    <button class="mobile-nav-btn" data-view="bookmarks">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg>
+      <span>Tersimpan</span>
+    </button>
+    <button class="mobile-nav-btn" data-view="settings">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      <span>Pengaturan</span>
+    </button>
+  </nav>
+
+  <!-- Main Container -->
+  <main class="main-content">
+
+    <!-- ==========================================
+         VIEW 1: DASHBOARD
+         ========================================== -->
+    <section id="view-dashboard" class="view-section active">
+      <div class="hero-banner">
+        <div class="hero-text">
+          <h1>Pusat Latihan TKA Bahasa Inggris</h1>
+          <p>Tingkatkan skor TKA dengan 25 paket soal simulasi resmi, auto-grading, pembahasan interaktif, dan tracking progres berkala.</p>
+        </div>
+        <div class="hero-actions">
+          <button class="btn btn-primary" id="btn-hero-start">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            Mulai Latihan
+          </button>
+        </div>
+      </div>
+
+      <!-- Quick Metrics Cards -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-card-header">
+            <span class="stat-title">Nilai Rata-rata</span>
+            <div class="stat-icon">📊</div>
+          </div>
+          <div class="stat-value" id="dash-avg-score">0</div>
+          <div class="stat-subtitle" id="dash-total-attempts">0x sesi ujian diselesaikan</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-card-header">
+            <span class="stat-title">Paket Terbaik</span>
+            <div class="stat-icon">🏆</div>
+          </div>
+          <div class="stat-value" id="dash-best-score">-</div>
+          <div class="stat-subtitle" id="dash-best-package">Belum ada data pengerjaan</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-card-header">
+            <span class="stat-title">Perlu Peningkatan</span>
+            <div class="stat-icon">🎯</div>
+          </div>
+          <div class="stat-value" id="dash-worst-score">-</div>
+          <div class="stat-subtitle" id="dash-worst-package">Belum ada data pengerjaan</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-card-header">
+            <span class="stat-title">Progres Bank Soal</span>
+            <div class="stat-icon">📚</div>
+          </div>
+          <div class="stat-value" id="dash-progress-text">0 / 25</div>
+          <div class="stat-subtitle">Paket soal telah dicoba</div>
+        </div>
+      </div>
+
+      <!-- Two-Column Analytics Layout -->
+      <div class="dashboard-grid">
+        <div>
+          <div class="panel-card" style="margin-bottom: 1.25rem;">
+            <div class="panel-header">
+              <div class="panel-title">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+                Perkembangan Nilai
+              </div>
+              <span class="stat-subtitle" id="chart-sub-label">Tren skor ujian</span>
+            </div>
+            <div style="height: 230px; position: relative;">
+              <canvas id="scoreProgressionChart"></canvas>
+            </div>
+          </div>
+
+          <div class="panel-card">
+            <div class="panel-header">
+              <div class="panel-title">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                Riwayat Pengerjaan Terakhir
+              </div>
+              <button class="btn btn-secondary btn-sm" id="btn-see-all-packages">Lihat Semua</button>
+            </div>
+            <!-- Desktop Table View -->
+            <div class="table-container desktop-recent-table-wrap">
+              <table class="custom-table">
+                <thead>
+                  <tr>
+                    <th>Paket Soal</th>
+                    <th>Skor</th>
+                    <th>Benar / Salah</th>
+                    <th>Waktu</th>
+                    <th>Tanggal</th>
+                    <th>Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="dash-recent-table-body">
+                  <tr>
+                    <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 2rem;">
+                      Belum ada riwayat ujian. Pilih salah satu paket soal untuk mulai!
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Mobile Card View -->
+            <div class="mobile-recent-cards" id="dash-recent-mobile-list"></div>
+          </div>
+        </div>
+
+        <div>
+          <div class="panel-card" style="height: 100%;">
+            <div class="panel-header">
+              <div class="panel-title">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                Evaluasi & Rekomendasi
+              </div>
+            </div>
+            <div class="evaluation-list" id="dash-evaluation-list"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         VIEW 2: PAKET SOAL (CATALOG)
+         ========================================== -->
+    <section id="view-packages" class="view-section">
+      <div class="catalog-toolbar">
+        <div>
+          <h2 style="font-size: 1.45rem; font-weight: 800; margin-bottom: 0.2rem;">Daftar 25 Paket Soal TKA</h2>
+          <p style="color: var(--text-secondary); font-size: 0.9rem;">Pilih paket soal untuk memulai simulasi ujian lengkap dengan penilaian instan.</p>
+        </div>
+
+        <div style="display: flex; gap: 0.65rem; flex-wrap: wrap;">
+          <div class="search-input-wrapper">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="package-search-input" class="search-input" placeholder="Cari nama paket soal...">
+          </div>
+          <div class="filter-pills">
+            <button class="filter-btn active" data-filter="all">Semua (25)</button>
+            <button class="filter-btn" data-filter="done">Sudah Dicoba</button>
+            <button class="filter-btn" data-filter="undone">Belum Dicoba</button>
+            <button class="filter-btn" data-filter="high">Nilai ≥ 80</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="package-grid" id="package-card-grid"></div>
+    </section>
+
+    <!-- ==========================================
+         VIEW 3: RUANG UJIAN (CBT SIMULATION)
+         ========================================== -->
+    <section id="view-exam" class="view-section">
+      <!-- Exam Sticky Header -->
+      <div class="exam-header">
+        <div class="exam-info-bar">
+          <button class="btn btn-secondary btn-sm" id="btn-quit-exam">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+            Keluar
+          </button>
+          <div class="exam-title-badge" id="exam-package-title">PAKET 1 TKA INGGRIS</div>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 0.65rem;">
+          <div class="exam-timer" id="exam-timer-display">
+            <span>⏱️</span>
+            <span id="exam-timer-digits">30:00</span>
+          </div>
+          <button class="btn btn-success btn-sm" id="btn-open-submit-modal">
+            Selesai Ujian
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobile Segmented View Switcher (Only visible on mobile) -->
+      <div class="exam-mobile-toggle">
+        <button class="mobile-toggle-btn active" id="btn-mobile-show-question">
+          ✍️ Soal No. <span id="mobile-current-q-num">1</span>
+        </button>
+        <button class="mobile-toggle-btn" id="btn-mobile-show-passage">
+          📖 Baca Teks
+        </button>
+      </div>
+
+      <!-- Exam Split Workspace -->
+      <div class="exam-workspace mobile-view-question" id="exam-workspace-container">
+        <!-- Left: Reading Passage Panel -->
+        <div class="passage-panel" id="passage-panel-container">
+          <div class="panel-toolbar">
+            <div class="text-tab-pills" id="passage-tabs"></div>
+            <div class="font-controls">
+              <button class="btn-icon" id="btn-font-dec" title="Perkecil Font">A-</button>
+              <button class="btn-icon" id="btn-font-inc" title="Perbesar Font">A+</button>
+            </div>
+          </div>
+          <div class="passage-content" id="passage-content-area">
+            <div class="passage-title" id="passage-title">Reading Passage</div>
+            <div id="passage-body">Memuat teks bacaan...</div>
+          </div>
+        </div>
+
+        <!-- Center: Question Workspace -->
+        <div class="question-panel" id="question-panel-container">
+          <div class="question-panel-body">
+            <div class="question-meta-header">
+              <span class="question-badge" id="exam-q-number-badge">Soal No. 1</span>
+              <span class="question-type-tag" id="exam-q-type-badge">Pilihan Ganda Tunggal</span>
+            </div>
+
+            <div class="question-prompt" id="exam-q-prompt">
+              Pertanyaan sedang dimuat...
+            </div>
+
+            <div class="options-list" id="exam-options-container"></div>
+          </div>
+
+          <div class="question-panel-footer">
+            <button class="btn btn-secondary btn-sm" id="btn-prev-q">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+              Sebelumnya
+            </button>
+            <button class="btn btn-outline-amber btn-sm" id="btn-flag-q">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+              <span id="btn-flag-label">Ragu</span>
+            </button>
+            <button class="btn btn-primary btn-sm" id="btn-next-q">
+              Selanjutnya
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Right: Navigator Grid (Desktop) -->
+        <div class="exam-nav-sidebar">
+          <div class="nav-sidebar-title">
+            <span>Navigasi Soal</span>
+            <span style="font-size: 0.78rem; color: var(--text-muted);" id="exam-answered-counter">0 / 30 Terjawab</span>
+          </div>
+
+          <div class="question-nav-grid" id="exam-nav-buttons"></div>
+
+          <div class="nav-legend">
+            <div class="legend-item"><div class="legend-dot answered"></div><span>Sudah dijawab</span></div>
+            <div class="legend-item"><div class="legend-dot flagged"></div><span>Ragu-ragu / Ditandai</span></div>
+            <div class="legend-item"><div class="legend-dot unanswered"></div><span>Belum dijawab</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mobile Bottom Floating Action Bar during Exam -->
+      <div class="exam-mobile-bottom-bar">
+        <button class="btn btn-secondary btn-sm" id="btn-mobile-prev">◀ Prev</button>
+        <button class="btn btn-outline-amber btn-sm" id="btn-mobile-flag">🔖 Ragu</button>
+        <button class="btn btn-secondary btn-sm" id="btn-mobile-drawer-toggle">
+          🔢 No. <span id="mobile-drawer-q-num">1</span> / 30 ▾
+        </button>
+        <button class="btn btn-primary btn-sm" id="btn-mobile-next">Next ▶</button>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         VIEW 4: RESULT SUMMARY
+         ========================================== -->
+    <section id="view-result" class="view-section">
+      <div class="result-hero">
+        <div class="result-badge" id="result-status-badge">🏆 Hasil Ujian Selesai</div>
+        <h2 style="font-size: 1.6rem; font-weight: 800; margin-bottom: 0.35rem;" id="result-package-name">PAKET 1 TKA INGGRIS</h2>
+        <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1.5rem;">Evaluasi hasil pengerjaan soal dan skor kamu.</p>
+
+        <!-- Circular Score Indicator -->
+        <div class="score-circle-wrap">
+          <svg class="score-circle-svg" viewBox="0 0 100 100">
+            <circle class="score-circle-bg" cx="50" cy="50" r="42"></circle>
+            <circle class="score-circle-val" id="result-score-circle" cx="50" cy="50" r="42" stroke-dasharray="264" stroke-dashoffset="264"></circle>
+          </svg>
+          <div class="score-circle-text">
+            <span class="score-num" id="result-score-value">0</span>
+            <span class="score-unit">Skor / 100</span>
+          </div>
+        </div>
+
+        <!-- Stat breakdown bar -->
+        <div class="result-stat-bar">
+          <div class="result-stat-col">
+            <span class="result-stat-num" style="color: var(--accent-emerald);" id="result-correct-count">0</span>
+            <span class="result-stat-label">Jawaban Benar</span>
+          </div>
+          <div class="result-stat-col">
+            <span class="result-stat-num" style="color: var(--accent-rose);" id="result-wrong-count">0</span>
+            <span class="result-stat-label">Jawaban Salah</span>
+          </div>
+          <div class="result-stat-col">
+            <span class="result-stat-num" id="result-total-count">30</span>
+            <span class="result-stat-label">Total Soal</span>
+          </div>
+          <div class="result-stat-col">
+            <span class="result-stat-num" id="result-time-spent">00:00</span>
+            <span class="result-stat-label">Waktu Pengerjaan</span>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div style="display: flex; justify-content: center; gap: 0.75rem; flex-wrap: wrap;">
+          <button class="btn btn-primary" id="btn-view-detailed-review">
+            Lihat Pembahasan Lengkap
+          </button>
+          <button class="btn btn-secondary" id="btn-retry-package">
+            Ulangi Paket Ini
+          </button>
+          <button class="btn btn-secondary" id="btn-back-to-dash">
+            Dashboard
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         VIEW 5: DETAILED REVIEW
+         ========================================== -->
+    <section id="view-review" class="view-section">
+      <div class="review-toolbar">
+        <div>
+          <h2 style="font-size: 1.45rem; font-weight: 800; margin-bottom: 0.2rem;" id="review-title-heading">Pembahasan Soal</h2>
+          <p style="color: var(--text-secondary); font-size: 0.9rem;">Pelajari kunci jawaban resmi dan penjelasan detail untuk meningkatkan pemahaman.</p>
+        </div>
+        <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
+          <button class="filter-btn active" data-review-filter="all">Semua Soal</button>
+          <button class="filter-btn" data-review-filter="wrong">Hanya Salah</button>
+          <button class="filter-btn" data-review-filter="correct">Hanya Benar</button>
+          <button class="btn btn-secondary btn-sm" id="btn-review-back-dash">Tutup</button>
+        </div>
+      </div>
+
+      <div id="review-items-container"></div>
+    </section>
+
+    <!-- ==========================================
+         VIEW 6: TIPS & LEARNING HUB
+         ========================================== -->
+    <section id="view-tips" class="view-section">
+      <div class="hero-banner" style="margin-bottom: 1.75rem;">
+        <div class="hero-text">
+          <h1>TKA English Strategy & Knowledge Hub</h1>
+          <p>Kuasai tipe-tipe soal Reading Comprehension, teknik eliminasi pilihan jebakan, dan kosakata akademik kunci untuk meraih skor maksimal.</p>
+        </div>
+      </div>
+
+      <div class="tips-grid">
+        <div class="tip-card">
+          <div class="tip-card-header">
+            <div class="tip-icon">💡</div>
+            <h3>Strategi Soal Main Idea</h3>
+          </div>
+          <ul>
+            <li><strong>Skimming Paragraf Awal & Akhir:</strong> Gagasan pokok biasanya terletak pada kalimat pembuka teks eksposisi atau kesimpulan di paragraf penutup.</li>
+            <li><strong>Hindari Pilihan Terlalu Sempit (Too Specific):</strong> Opsi yang hanya menyebutkan contoh detail dari 1 paragraf bukanlah main idea seluruh teks.</li>
+            <li><strong>Perhatikan Kata Kunci Berulang:</strong> Konsep yang terus diulang dengan sinonim sering kali merupakan topik inti pembahasan.</li>
+          </ul>
+        </div>
+
+        <div class="tip-card">
+          <div class="tip-card-header">
+            <div class="tip-icon">🧩</div>
+            <h3>Pilihan Ganda Kompleks (MCMA)</h3>
+          </div>
+          <ul>
+            <li><strong>Verifikasi Setiap Pilihan Terpisah:</strong> Anggap setiap pilihan A sampai E sebagai pernyataan Benar/Salah (True/False) yang independen.</li>
+            <li><strong>Cocokkan Frasa Eksplisit:</strong> Jangan berasumsi berdasarkan pengetahuan umum di luar teks; pastikan ada bukti kalimat dalam bacaan.</li>
+            <li><strong>Waspadai Distractor Extreme:</strong> Pilihan yang memuat kata absolut seperti <em>"always, never, completely, impossible"</em> sering kali salah kecuali teks memang menyatakannya demikian.</li>
+          </ul>
+        </div>
+
+        <div class="tip-card">
+          <div class="tip-card-header">
+            <div class="tip-icon">📊</div>
+            <h3>Menaklukkan Matching Table</h3>
+          </div>
+          <ul>
+            <li><strong>Pahami Definisi Kategori:</strong> Identifikasi perbedaan dua kutub klasifikasi (contoh: <em>Advantage vs Disadvantage</em>, atau <em>Agree vs Disagree</em>).</li>
+            <li><strong>Fokus pada Nada Kalimat (Tone):</strong> Perhatikan kata sifat atau kata kerja yang menunjukkan dampak positif atau negatif pada setiap pernyataan.</li>
+          </ul>
+        </div>
+
+        <div class="tip-card">
+          <div class="tip-card-header">
+            <div class="tip-icon">📖</div>
+            <h3>Vocabulary Booster Akademik</h3>
+          </div>
+          <ul>
+            <li><strong>Dissonance:</strong> Ketidakselarasan / pertentangan ide.</li>
+            <li><strong>Inadvertently:</strong> Secara tidak sengaja / tanpa disadari.</li>
+            <li><strong>Autonomy:</strong> Kemandirian / kebebasan menentukan arah.</li>
+            <li><strong>Vulnerability:</strong> Kerentanan / kelemahan sistemik.</li>
+            <li><strong>Exacerbate:</strong> Memperparah suatu situasi.</li>
+            <li><strong>Feasible:</strong> Layak / memungkinkan untuk diwujudkan.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         VIEW 7: BOOKMARKS
+         ========================================== -->
+    <section id="view-bookmarks" class="view-section">
+      <div class="review-toolbar">
+        <div>
+          <h2 style="font-size: 1.45rem; font-weight: 800; margin-bottom: 0.2rem;">Bank Soal Tersimpan</h2>
+          <p style="color: var(--text-secondary); font-size: 0.9rem;">Koleksi soal yang kamu tandai untuk diulang dan dipelajari lebih dalam.</p>
+        </div>
+      </div>
+
+      <div id="bookmarks-container"></div>
+    </section>
+
+    <!-- ==========================================
+         VIEW 8: SETTINGS (PENGATURAN)
+         ========================================== -->
+    <section id="view-settings" class="view-section">
+      <div style="margin-bottom: 1.5rem;">
+        <h2 style="font-size: 1.45rem; font-weight: 800; margin-bottom: 0.2rem;">Pengaturan Ujian & Aplikasi</h2>
+        <p style="color: var(--text-secondary); font-size: 0.9rem;">Sesuaikan durasi timer, ukuran teks, tampilan mobile, dan kelola data progres belajarmu.</p>
+      </div>
+
+      <!-- Settings Section 1: Timer & Ujian -->
+      <div class="settings-section-title">⏱️ Timer & Mode Simulasi</div>
+      <div class="settings-card">
+        <div class="setting-row">
+          <div>
+            <div class="setting-label">Durasi Timer Per Paket</div>
+            <div class="setting-desc">Waktu pengerjaan untuk setiap paket simulasi ujian (30 butir soal).</div>
+          </div>
+          <div>
+            <select class="select-input" id="setting-timer-select">
+              <option value="15">15 Menit (Cepat / Drill)</option>
+              <option value="20">20 Menit</option>
+              <option value="25">25 Menit</option>
+              <option value="30" selected>30 Menit (Standar TKA)</option>
+              <option value="45">45 Menit</option>
+              <option value="60">60 Menit</option>
+              <option value="0">Tanpa Timer (Mode Bebas)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="setting-row">
+          <div>
+            <div class="setting-label">Peringatan Waktu Menipis</div>
+            <div class="setting-desc">Tampilkan indikator peringatan warna merah saat waktu tersisa 5 menit.</div>
+          </div>
+          <div>
+            <input type="checkbox" id="setting-timer-warning" checked style="accent-color: var(--accent-primary); width: 18px; height: 18px;">
+          </div>
+        </div>
+      </div>
+
+      <!-- Settings Section 2: Kenyamanan Tampilan & Mobile -->
+      <div class="settings-section-title">📱 Kenyamanan Tampilan & Mobile</div>
+      <div class="settings-card">
+        <div class="setting-row">
+          <div>
+            <div class="setting-label">Ukuran Huruf Teks Bacaan (Default)</div>
+            <div class="setting-desc">Atur kenyamanan ukuran teks saat membaca reading passage.</div>
+          </div>
+          <div>
+            <select class="select-input" id="setting-font-size">
+              <option value="0.9">Kecil (14px)</option>
+              <option value="1.0" selected>Standar (16px)</option>
+              <option value="1.1">Sedang (18px)</option>
+              <option value="1.2">Besar (20px)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="setting-row">
+          <div>
+            <div class="setting-label">Auto-Scroll ke Atas</div>
+            <div class="setting-desc">Secara otomatis scroll layar ke atas saat berpindah ke nomor soal berikutnya.</div>
+          </div>
+          <div>
+            <input type="checkbox" id="setting-auto-scroll" checked style="accent-color: var(--accent-primary); width: 18px; height: 18px;">
+          </div>
+        </div>
+      </div>
+
+      <!-- Settings Section 3: Data & Vercel / Cloud Sync -->
+      <div class="settings-section-title">💾 Penyimpanan Data & Hosting Vercel</div>
+      <div class="settings-card">
+        <div class="setting-row">
+          <div>
+            <div class="setting-label">Status Penyimpanan Data</div>
+            <div class="setting-desc" id="setting-storage-status">Tersimpan di Browser LocalStorage (Siap Offline & Vercel).</div>
+          </div>
+          <div style="display: flex; gap: 0.5rem;">
+            <button class="btn btn-secondary btn-sm" id="btn-export-data">Ekspor Data (JSON)</button>
+          </div>
+        </div>
+
+        <div class="setting-row">
+          <div>
+            <div class="setting-label" style="color: var(--accent-rose);">Reset Riwayat Ujian</div>
+            <div class="setting-desc">Hapus seluruh riwayat pengerjaan, skor, dan study streak untuk memulai dari nol.</div>
+          </div>
+          <div>
+            <button class="btn btn-danger btn-sm" id="btn-reset-data">Hapus Semua Data</button>
+          </div>
+        </div>
+
+        <!-- Vercel Deployment Guidance Box -->
+        <div class="cloud-guide-box">
+          <div style="font-weight: 700; color: #fff; margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.4rem;">
+            <span>☁️</span> Panduan Hosting di Vercel & Database
+          </div>
+          <p style="margin-bottom: 0.5rem;">
+            <strong>Kabar baik:</strong> Aplikasi ini sudah dibuat <strong>100% kompatibel dengan Vercel Static Hosting</strong>. Semua riwayat skor, jawaban, bookmark, dan streak tersimpan aman di <em>Browser LocalStorage</em> setiap kali kamu berlatih di HP atau laptop tanpa butuh database berbayar!
+          </p>
+          <p>
+            Jika kamu ingin sinkronisasi multi-device antar perangkat di kemudian hari, database cloud gratis terbaik untuk Vercel adalah:
+            <br>• <strong>Turso (libSQL/SQLite Cloud)</strong>: Sangat cepat, gratis, dan query persis sama dengan SQLite lokal.
+            <br>• <strong>Supabase / Neon Postgres</strong>: Database cloud gratis dengan REST API instan.
+          </p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Mobile Question Navigator Drawer / Modal -->
+  <div class="modal-overlay" id="exam-nav-drawer-modal">
+    <div class="modal-content" style="max-height: 85vh; display: flex; flex-direction: column;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <h3 class="modal-title" style="margin: 0;">Pilih Nomor Soal</h3>
+        <button class="btn btn-secondary btn-sm" id="btn-close-drawer">Tutup</button>
+      </div>
+      <div style="overflow-y: auto; flex: 1;">
+        <div class="question-nav-grid" id="mobile-drawer-nav-buttons" style="grid-template-columns: repeat(5, 1fr); gap: 0.5rem;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confirm Submit Exam Modal -->
+  <div class="modal-overlay" id="submit-confirm-modal">
+    <div class="modal-content">
+      <h3 class="modal-title">Konfirmasi Selesai Ujian</h3>
+      <div class="modal-body" id="modal-submit-summary">
+        Apakah kamu yakin ingin menyelesaikan ujian ini? Jawaban kamu akan dinilai langsung oleh sistem.
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" id="btn-modal-cancel">Kembali Mengerjakan</button>
+        <button class="btn btn-success" id="btn-modal-confirm-submit">Ya, Selesai Sekarang</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- JavaScript Application Logic -->
+  <script src="app.js"></script>
+</body>
+</html>
