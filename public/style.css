@@ -77,6 +77,57 @@ body {
 }
 
 /* ===================================================================
+   CUSTOM SCROLLBAR (Minimalist Titanium Dark & Steel Blue Hover)
+   =================================================================== */
+/* Standard Firefox Scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #262c3d transparent;
+}
+
+/* Chrome, Edge, Safari, Opera (WebKit & Chromium) */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #232838;
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  background-clip: padding-box;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-primary);
+  border-color: rgba(59, 130, 246, 0.4);
+  box-shadow: 0 0 8px rgba(59, 130, 246, 0.35);
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: var(--accent-primary-hover);
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Dedicated styling for container scrollbars */
+.passage-content::-webkit-scrollbar-track,
+.question-panel-body::-webkit-scrollbar-track,
+.question-nav-grid::-webkit-scrollbar-track,
+.table-container::-webkit-scrollbar-track {
+  background: rgba(14, 16, 21, 0.35);
+  border-radius: var(--radius-full);
+}
+
+/* ===================================================================
    TOP NAVBAR (Desktop & Tablet)
    =================================================================== */
 .navbar {
