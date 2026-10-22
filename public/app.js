@@ -29,7 +29,10 @@ const state = {
   activeReviewData: null,
   reviewFilter: 'all',
   catalogFilter: 'all',
-  catalogSearch: ''
+  catalogSearch: '',
+  passageCollapsed: false,
+  desktopNavCollapsed: false,
+  mobileBarMinimized: false
 };
 
 // Chart.js instance holder
@@ -75,16 +78,30 @@ const DOM = {
   examTimerDigits: document.getElementById('exam-timer-digits'),
   examTimerDisplay: document.getElementById('exam-timer-display'),
   examWorkspaceContainer: document.getElementById('exam-workspace-container'),
+  passagePanelContainer: document.getElementById('passage-panel-container'),
+  btnTogglePassage: document.getElementById('btn-toggle-passage'),
+  passageCollapseIcon: document.getElementById('passage-collapse-icon'),
+  passageCollapseLabel: document.getElementById('passage-collapse-label'),
+  passageContextBar: document.getElementById('passage-context-bar'),
+  passageContextText: document.getElementById('passage-context-text'),
   passageTabs: document.getElementById('passage-tabs'),
   passageTitle: document.getElementById('passage-title'),
   passageBody: document.getElementById('passage-body'),
   passageContentArea: document.getElementById('passage-content-area'),
   examQNumberBadge: document.getElementById('exam-q-number-badge'),
   examQTypeBadge: document.getElementById('exam-q-type-badge'),
+  questionRefTitle: document.getElementById('question-ref-title'),
+  btnScrollToText: document.getElementById('btn-scroll-to-text'),
+  btnOpenDrawerInline: document.getElementById('btn-open-drawer-inline'),
   examQPrompt: document.getElementById('exam-q-prompt'),
   examOptionsContainer: document.getElementById('exam-options-container'),
+  examNavSidebar: document.getElementById('exam-nav-sidebar'),
   examNavButtons: document.getElementById('exam-nav-buttons'),
   examAnsweredCounter: document.getElementById('exam-answered-counter'),
+  btnToggleNavDesktop: document.getElementById('btn-toggle-nav-desktop'),
+  desktopNavCollapseIcon: document.getElementById('desktop-nav-collapse-icon'),
+  btnExpandNavDesktop: document.getElementById('btn-expand-nav-desktop'),
+  desktopMinCounter: document.getElementById('desktop-min-counter'),
   btnPrevQ: document.getElementById('btn-prev-q'),
   btnNextQ: document.getElementById('btn-next-q'),
   btnFlagQ: document.getElementById('btn-flag-q'),
@@ -93,9 +110,11 @@ const DOM = {
   btnFontInc: document.getElementById('btn-font-inc'),
 
   // Mobile Exam Controls
-  btnMobileShowQuestion: document.getElementById('btn-mobile-show-question'),
-  btnMobileShowPassage: document.getElementById('btn-mobile-show-passage'),
   mobileCurrentQNum: document.getElementById('mobile-current-q-num'),
+  examMobileBottomBar: document.getElementById('exam-mobile-bottom-bar'),
+  btnMinimizeMobileBar: document.getElementById('btn-minimize-mobile-bar'),
+  btnRestoreMobileBar: document.getElementById('btn-restore-mobile-bar'),
+  floatingQNum: document.getElementById('floating-q-num'),
   btnMobilePrev: document.getElementById('btn-mobile-prev'),
   btnMobileNext: document.getElementById('btn-mobile-next'),
   btnMobileFlag: document.getElementById('btn-mobile-flag'),
@@ -983,20 +1002,8 @@ function updateTimerDisplay() {
 }
 
 function setMobileExamView(viewType) {
+  // Mobile view now unifies passage and question together seamlessly.
   userSettings.mobileViewMode = viewType;
-  if (!DOM.examWorkspaceContainer) return;
-
-  if (viewType === 'passage') {
-    DOM.examWorkspaceContainer.classList.remove('mobile-view-question');
-    DOM.examWorkspaceContainer.classList.add('mobile-view-passage');
-    DOM.btnMobileShowPassage.classList.add('active');
-    DOM.btnMobileShowQuestion.classList.remove('active');
-  } else {
-    DOM.examWorkspaceContainer.classList.remove('mobile-view-passage');
-    DOM.examWorkspaceContainer.classList.add('mobile-view-question');
-    DOM.btnMobileShowQuestion.classList.add('active');
-    DOM.btnMobileShowPassage.classList.remove('active');
-  }
 }
 
 function renderExamNavGrid() {
@@ -1050,7 +1057,9 @@ function updateAnsweredCounter() {
   for (let i = 1; i <= total; i++) {
     if (isQuestionAnswered(i)) answered++;
   }
-  DOM.examAnsweredCounter.textContent = `${answered} / ${total} Terjawab`;
+  const counterStr = `${answered} / ${total} Terjawab`;
+  DOM.examAnsweredCounter.textContent = counterStr;
+  if (DOM.desktopMinCounter) DOM.desktopMinCounter.textContent = `${answered}/${total}`;
 }
 
 function displayCurrentQuestion() {
@@ -1066,9 +1075,25 @@ function displayCurrentQuestion() {
   if (q.type === 'matching') typeLabel = 'Matching Table';
   DOM.examQTypeBadge.textContent = typeLabel;
 
-  // Mobile indicators
+  // Mobile indicators & Floating Navigation Pill
   if (DOM.mobileCurrentQNum) DOM.mobileCurrentQNum.textContent = q.number;
   if (DOM.mobileDrawerQNum) DOM.mobileDrawerQNum.textContent = q.number;
+  if (DOM.floatingQNum) DOM.floatingQNum.textContent = q.number;
+
+  // Find corresponding text for this question
+  const texts = state.activePackage.texts || [];
+  let currentText = texts.find(t => (t.text_number || t.number) === q.text_number);
+  if (!currentText && texts.length > 0) currentText = texts[0];
+  const currentTextNum = currentText ? (currentText.text_number || currentText.number || 1) : (q.text_number || 1);
+  const currentTitle = currentText ? currentText.title : `Reading Text ${currentTextNum}`;
+
+  // Update question-text link notice so user knows exactly which passage matches this question!
+  if (DOM.questionRefTitle) {
+    DOM.questionRefTitle.textContent = `Teks ${currentTextNum} (${currentTitle})`;
+  }
+  if (DOM.passageContextText) {
+    DOM.passageContextText.textContent = `Soal No. ${q.number} mengacu pada teks bacaan di bawah ini (Teks ${currentTextNum}):`;
+  }
 
   // Prompt
   DOM.examQPrompt.textContent = q.question || `Bacalah teks yang bersangkutan dan tentukan jawaban yang tepat untuk soal nomor ${q.number}.`;
@@ -1296,8 +1321,6 @@ function updateNavGridButton(qNum) {
 function goToQuestion(index) {
   if (index < 0 || index >= state.activePackage.questions.length) return;
   state.currentQIndex = index;
-  // If user was on mobile passage view, keep or switch to question view
-  setMobileExamView('question');
   displayCurrentQuestion();
 }
 
@@ -1344,23 +1367,77 @@ function setupExamControls() {
     });
   }
 
-  // Mobile Segmented Switcher
-  if (DOM.btnMobileShowQuestion) {
-    DOM.btnMobileShowQuestion.addEventListener('click', () => setMobileExamView('question'));
-  }
-  if (DOM.btnMobileShowPassage) {
-    DOM.btnMobileShowPassage.addEventListener('click', () => setMobileExamView('passage'));
+  // Toggle Reading Passage Collapse / Expand
+  if (DOM.btnTogglePassage) {
+    DOM.btnTogglePassage.addEventListener('click', () => {
+      state.passageCollapsed = !state.passageCollapsed;
+      DOM.passagePanelContainer.classList.toggle('passage-collapsed', state.passageCollapsed);
+      if (DOM.passageCollapseIcon) DOM.passageCollapseIcon.textContent = state.passageCollapsed ? '▼' : '▲';
+      if (DOM.passageCollapseLabel) DOM.passageCollapseLabel.textContent = state.passageCollapsed ? 'Bentangkan Teks' : 'Ciutkan Teks';
+    });
   }
 
-  // Mobile Question Drawer Toggle
-  if (DOM.btnMobileDrawerToggle) {
-    DOM.btnMobileDrawerToggle.addEventListener('click', () => {
-      DOM.examNavDrawerModal.classList.add('active');
+  // Scroll to Text when tapping "Lihat Teks ↑"
+  if (DOM.btnScrollToText) {
+    DOM.btnScrollToText.addEventListener('click', () => {
+      if (state.passageCollapsed) {
+        state.passageCollapsed = false;
+        DOM.passagePanelContainer.classList.remove('passage-collapsed');
+        if (DOM.passageCollapseIcon) DOM.passageCollapseIcon.textContent = '▲';
+        if (DOM.passageCollapseLabel) DOM.passageCollapseLabel.textContent = 'Ciutkan Teks';
+      }
+      DOM.passagePanelContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
+  }
+
+  // Desktop Navigator Minimize / Expand
+  if (DOM.btnToggleNavDesktop) {
+    DOM.btnToggleNavDesktop.addEventListener('click', () => {
+      state.desktopNavCollapsed = !state.desktopNavCollapsed;
+      DOM.examWorkspaceContainer.classList.toggle('nav-collapsed', state.desktopNavCollapsed);
+      if (DOM.desktopNavCollapseIcon) {
+        DOM.desktopNavCollapseIcon.textContent = state.desktopNavCollapsed ? '❮' : '❯';
+      }
+    });
+  }
+  if (DOM.btnExpandNavDesktop) {
+    DOM.btnExpandNavDesktop.addEventListener('click', () => {
+      state.desktopNavCollapsed = false;
+      DOM.examWorkspaceContainer.classList.remove('nav-collapsed');
+      if (DOM.desktopNavCollapseIcon) DOM.desktopNavCollapseIcon.textContent = '❯';
+    });
+  }
+
+  // Mobile Question Drawer Toggle (from bottom bar and inline header)
+  const openQuestionDrawer = () => {
+    DOM.examNavDrawerModal.classList.add('active');
+  };
+  if (DOM.btnMobileDrawerToggle) {
+    DOM.btnMobileDrawerToggle.addEventListener('click', openQuestionDrawer);
+  }
+  if (DOM.btnOpenDrawerInline) {
+    DOM.btnOpenDrawerInline.addEventListener('click', openQuestionDrawer);
   }
   if (DOM.btnCloseDrawer) {
     DOM.btnCloseDrawer.addEventListener('click', () => {
       DOM.examNavDrawerModal.classList.remove('active');
+    });
+  }
+
+  // Mobile Bottom Bar Minimize / Restore
+  if (DOM.btnMinimizeMobileBar) {
+    DOM.btnMinimizeMobileBar.addEventListener('click', () => {
+      state.mobileBarMinimized = true;
+      DOM.examMobileBottomBar.classList.add('bar-minimized');
+      DOM.btnRestoreMobileBar.classList.add('active');
+      showToast('Navigasi bawah diciutkan. Ketuk tombol melayang untuk membuka kembali.', 'info');
+    });
+  }
+  if (DOM.btnRestoreMobileBar) {
+    DOM.btnRestoreMobileBar.addEventListener('click', () => {
+      state.mobileBarMinimized = false;
+      DOM.examMobileBottomBar.classList.remove('bar-minimized');
+      DOM.btnRestoreMobileBar.classList.remove('active');
     });
   }
 

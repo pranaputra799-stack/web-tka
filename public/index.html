@@ -265,39 +265,57 @@
         </div>
       </div>
 
-      <!-- Mobile Segmented View Switcher (Only visible on mobile) -->
-      <div class="exam-mobile-toggle">
-        <button class="mobile-toggle-btn active" id="btn-mobile-show-question">
-          ✍️ Soal No. <span id="mobile-current-q-num">1</span>
-        </button>
-        <button class="mobile-toggle-btn" id="btn-mobile-show-passage">
-          📖 Baca Teks
-        </button>
-      </div>
-
-      <!-- Exam Split Workspace -->
-      <div class="exam-workspace mobile-view-question" id="exam-workspace-container">
-        <!-- Left: Reading Passage Panel -->
+      <!-- Exam Split Workspace (Unified on Desktop & Mobile) -->
+      <div class="exam-workspace" id="exam-workspace-container">
+        <!-- Left / Top: Reading Passage Panel -->
         <div class="passage-panel" id="passage-panel-container">
           <div class="panel-toolbar">
-            <div class="text-tab-pills" id="passage-tabs"></div>
-            <div class="font-controls">
-              <button class="btn-icon" id="btn-font-dec" title="Perkecil Font">A-</button>
-              <button class="btn-icon" id="btn-font-inc" title="Perbesar Font">A+</button>
+            <div class="passage-toolbar-left">
+              <span class="passage-header-badge" id="passage-badge-title">📖 Teks Bacaan</span>
+              <div class="text-tab-pills" id="passage-tabs"></div>
+            </div>
+            <div class="panel-toolbar-actions">
+              <button class="btn btn-secondary btn-xs btn-toggle-passage" id="btn-toggle-passage" title="Ciutkan / Bentangkan Teks">
+                <span id="passage-collapse-icon">▲</span>
+                <span id="passage-collapse-label">Ciutkan Teks</span>
+              </button>
+              <div class="font-controls">
+                <button class="btn-icon" id="btn-font-dec" title="Perkecil Font">A-</button>
+                <button class="btn-icon" id="btn-font-inc" title="Perbesar Font">A+</button>
+              </div>
             </div>
           </div>
+
+          <!-- Passage Context Notice (Shows user exactly which questions use this text) -->
+          <div class="passage-context-bar" id="passage-context-bar">
+            <span class="context-pin">📌</span>
+            <span id="passage-context-text">Soal No. 1 mengacu pada teks bacaan di bawah ini:</span>
+          </div>
+
           <div class="passage-content" id="passage-content-area">
             <div class="passage-title" id="passage-title">Reading Passage</div>
             <div id="passage-body">Memuat teks bacaan...</div>
           </div>
         </div>
 
-        <!-- Center: Question Workspace -->
+        <!-- Center / Bottom: Question Workspace -->
         <div class="question-panel" id="question-panel-container">
           <div class="question-panel-body">
             <div class="question-meta-header">
-              <span class="question-badge" id="exam-q-number-badge">Soal No. 1</span>
-              <span class="question-type-tag" id="exam-q-type-badge">Pilihan Ganda Tunggal</span>
+              <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                <span class="question-badge" id="exam-q-number-badge">Soal No. 1</span>
+                <span class="question-type-tag" id="exam-q-type-badge">Pilihan Ganda Tunggal</span>
+              </div>
+              <button class="btn btn-secondary btn-xs inline-nav-trigger" id="btn-open-drawer-inline" title="Buka Daftar Nomor Soal">
+                🔢 Navigasi Soal ▾
+              </button>
+            </div>
+
+            <!-- Clear Text Reference Pill on Mobile / Desktop -->
+            <div class="question-text-ref-pill" id="question-text-ref-pill">
+              <span class="ref-icon">📖</span>
+              <span>Berdasarkan: <strong id="question-ref-title">Teks 1</strong></span>
+              <button class="btn-scroll-to-text" id="btn-scroll-to-text" title="Lihat Teks Bacaan">Lihat Teks ↑</button>
             </div>
 
             <div class="question-prompt" id="exam-q-prompt">
@@ -323,32 +341,56 @@
           </div>
         </div>
 
-        <!-- Right: Navigator Grid (Desktop) -->
-        <div class="exam-nav-sidebar">
+        <!-- Right: Navigator Grid (Desktop, Minimizable) -->
+        <div class="exam-nav-sidebar" id="exam-nav-sidebar">
           <div class="nav-sidebar-title">
-            <span>Navigasi Soal</span>
-            <span style="font-size: 0.78rem; color: var(--text-muted);" id="exam-answered-counter">0 / 30 Terjawab</span>
+            <div style="display: flex; align-items: center; gap: 0.4rem;">
+              <span>Navigasi Soal</span>
+              <span style="font-size: 0.75rem; color: var(--text-muted);" id="exam-answered-counter">0/30</span>
+            </div>
+            <button class="btn-icon" id="btn-toggle-nav-desktop" title="Ciutkan / Sembunyikan Navigasi Soal">
+              <span id="desktop-nav-collapse-icon">❯</span>
+            </button>
           </div>
 
-          <div class="question-nav-grid" id="exam-nav-buttons"></div>
+          <div class="nav-sidebar-full-content" id="nav-sidebar-full-content">
+            <div class="question-nav-grid" id="exam-nav-buttons"></div>
 
-          <div class="nav-legend">
-            <div class="legend-item"><div class="legend-dot answered"></div><span>Sudah dijawab</span></div>
-            <div class="legend-item"><div class="legend-dot flagged"></div><span>Ragu-ragu / Ditandai</span></div>
-            <div class="legend-item"><div class="legend-dot unanswered"></div><span>Belum dijawab</span></div>
+            <div class="nav-legend">
+              <div class="legend-item"><div class="legend-dot answered"></div><span>Sudah dijawab</span></div>
+              <div class="legend-item"><div class="legend-dot flagged"></div><span>Ragu-ragu / Ditandai</span></div>
+              <div class="legend-item"><div class="legend-dot unanswered"></div><span>Belum dijawab</span></div>
+            </div>
           </div>
+
+          <!-- Vertical Collapsed Strip Button (Shown when minimized on desktop) -->
+          <button class="btn-collapsed-nav-expand" id="btn-expand-nav-desktop" title="Bentangkan Navigasi Soal">
+            <span>❮</span>
+            <span class="vertical-text">NAVIGASI (<span id="desktop-min-counter">0/30</span>)</span>
+          </button>
         </div>
       </div>
 
-      <!-- Mobile Bottom Floating Action Bar during Exam -->
-      <div class="exam-mobile-bottom-bar">
-        <button class="btn btn-secondary btn-sm" id="btn-mobile-prev">◀ Prev</button>
-        <button class="btn btn-outline-amber btn-sm" id="btn-mobile-flag">🔖 Ragu</button>
-        <button class="btn btn-secondary btn-sm" id="btn-mobile-drawer-toggle">
-          🔢 No. <span id="mobile-drawer-q-num">1</span> / 30 ▾
+      <!-- Mobile Bottom Floating Action Bar during Exam (Minimizable) -->
+      <div class="exam-mobile-bottom-bar" id="exam-mobile-bottom-bar">
+        <div class="mobile-bar-actions">
+          <button class="btn btn-secondary btn-sm" id="btn-mobile-prev">◀ Prev</button>
+          <button class="btn btn-outline-amber btn-sm" id="btn-mobile-flag">🔖 Ragu</button>
+          <button class="btn btn-secondary btn-sm" id="btn-mobile-drawer-toggle">
+            🔢 No. <span id="mobile-drawer-q-num">1</span> / 30 ▾
+          </button>
+          <button class="btn btn-primary btn-sm" id="btn-mobile-next">Next ▶</button>
+        </div>
+        <button class="btn-minimize-bar" id="btn-minimize-mobile-bar" title="Ciutkan navigasi agar layar penuh">
+          ▾
         </button>
-        <button class="btn btn-primary btn-sm" id="btn-mobile-next">Next ▶</button>
       </div>
+
+      <!-- Floating Mini Pill (Shown when mobile bottom bar is minimized) -->
+      <button class="floating-nav-pill" id="btn-restore-mobile-bar">
+        <span>🔢 No. <span id="floating-q-num">1</span> / 30</span>
+        <span class="pill-open-arrow">▴</span>
+      </button>
     </section>
 
     <!-- ==========================================
